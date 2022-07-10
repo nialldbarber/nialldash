@@ -429,3 +429,26 @@ Deno.test(
     assertEquals(findLastKey({ a: false, b: false, c: true }, Boolean), 'c')
   }
 )
+
+/**
+ * times()
+ *
+ * @param amount: number
+ * @param iteratee: any
+ *
+ * Invokes the iteratee n times,
+ * returning an array of the results
+ * of each invocation. The iteratee
+ * is invoked with one argument; (index).
+ *
+ * E.G.
+ * times(3, 0) => [0, 0, 0]
+ * times(5, 'pizza') => ['pizza', 'pizza', 'pizza', 'pizza', 'pizza']
+ */
+const times = (amount: number, iteratee: any) => Array(amount).fill(iteratee)
+
+Deno.test('times() repeats the iteratee by the amount', () => {
+  assertEquals(times(3, 0), [0, 0, 0])
+  assertEquals(times(5, 'pizza'), ['pizza', 'pizza', 'pizza', 'pizza', 'pizza'])
+  assertEquals(times(3, 'hello'), ['hello', 'hello', 'hello'])
+})
