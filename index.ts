@@ -367,7 +367,6 @@ const findKey = (
     if (callbackFn(value, key, object)) {
       return key
     }
-    return null
   }
 }
 
@@ -382,9 +381,51 @@ Deno.test(
       findKey({ name: 'niall' }, (x) => x === 'niall'),
       'name'
     )
+  }
+)
+
+/**
+ * findLastKey()
+ *
+ * @param object Record<string, any>
+ * @param callbackFn: (...args: Array<any>) => boolean
+ *
+ * This method is like _.findKey except that
+ * it iterates over elements of a collection
+ * in the opposite order.
+ *
+ * E.G.
+ * findLastKey({ a: 10, b: 20, c: 30 }, (x) => x > 10) => 'c'
+ * findLastKey(
+ *  { name1: 'niall', name2: 'niall', name3: 'niall' },
+ *  (x) => x === 'niall'
+ * ) => 'name3'
+ */
+const findLastKey = (
+  object: Record<string, any>,
+  callbackFn: (...args: Array<any>) => boolean
+) => {
+  for (const [key, value] of Object.entries(object).reverse()) {
+    if (callbackFn(value, key, object)) {
+      return key
+    }
+  }
+}
+
+Deno.test(
+  'findLastKey() finds last key that satisfies the callback function',
+  () => {
     assertEquals(
-      findKey({ a: 1 }, (x) => x > 1),
-      null
+      findLastKey({ a: 10, b: 20, c: 30 }, (x) => x > 10),
+      'c'
     )
+    assertEquals(
+      findLastKey(
+        { name1: 'niall', name2: 'niall', name3: 'niall' },
+        (x) => x === 'niall'
+      ),
+      'name3'
+    )
+    assertEquals(findLastKey({ a: false, b: false, c: true }, Boolean), 'c')
   }
 )
