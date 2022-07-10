@@ -343,3 +343,48 @@ Deno.test(
     )
   }
 )
+
+/**
+ * findKey()
+ *
+ * @param object Record<string, any>
+ * @param callbackFn: (...args: Array<any>) => boolean
+ *
+ * This method is like _.find except that
+ * it returns the key of the first element
+ * predicate returns truthy for instead of
+ * the element itself.
+ *
+ * E.G.
+ * findKey({ a: 1 }, (x) => x > 0) => 'a'
+ * findKey({ name: 'niall' }, (x) => x === 'niall') => 'name'
+ */
+const findKey = (
+  object: Record<string, any>,
+  callbackFn: (...args: Array<any>) => boolean
+) => {
+  for (const [key, value] of Object.entries(object)) {
+    if (callbackFn(value, key, object)) {
+      return key
+    }
+    return null
+  }
+}
+
+Deno.test(
+  'findKey() finds the first key that satisfies the callback function',
+  () => {
+    assertEquals(
+      findKey({ a: 1 }, (x) => x > 0),
+      'a'
+    )
+    assertEquals(
+      findKey({ name: 'niall' }, (x) => x === 'niall'),
+      'name'
+    )
+    assertEquals(
+      findKey({ a: 1 }, (x) => x > 1),
+      null
+    )
+  }
+)
