@@ -310,3 +310,36 @@ Deno.test('assign() will do stuff', () => {
     b: { c: 3 },
   })
 })
+
+/**
+ * deepObjectsEqualCheck()
+ *
+ * @param obj1 Record<string, any>
+ * @param obj2 Record<string, any>
+ *
+ * This deeply compares two objects
+ * and checks their equality.
+ *
+ * E.G.
+ * deepObjectsEqualCheck({ a: 1 }, { a: 1 }) => true
+ * deepObjectsEqualCheck({ a: 1 }, { a: 2 }) => false
+ * deepObjectsEqualCheck({ a: 1, b: { c: 2 } }, { a: 1, b: { c: 2 } }) => true
+ */
+const deepObjectsEqualCheck = (
+  obj1: Record<string, any>,
+  obj2: Record<string, any>
+) => stringifyObject(obj1) === stringifyObject(obj2)
+
+const stringifyObject = (obj: Record<string, any>) => JSON.stringify(obj)
+
+Deno.test(
+  'deepObjectsEqualCheck() returns true if two objects are the same',
+  () => {
+    assertEquals(deepObjectsEqualCheck({ a: 1 }, { a: 1 }), true)
+    assertEquals(deepObjectsEqualCheck({ a: 1 }, { a: 2 }), false)
+    assertEquals(
+      deepObjectsEqualCheck({ a: 1, b: { c: 2 } }, { a: 1, b: { c: 2 } }),
+      true
+    )
+  }
+)
