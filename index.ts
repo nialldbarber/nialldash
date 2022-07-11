@@ -361,9 +361,13 @@ Deno.test(
  */
 const findKey = (
   object: Record<string, any>,
-  callbackFn: (...args: Array<any>) => boolean
+  callbackFn: (...args: Array<any>) => boolean,
+  reverse?: boolean
 ) => {
-  for (const [key, value] of Object.entries(object)) {
+  const obj = reverse
+    ? Object.entries(object)
+    : Object.entries(object).reverse()
+  for (const [key, value] of obj) {
     if (callbackFn(value, key, object)) {
       return key
     }
@@ -452,3 +456,44 @@ Deno.test('times() repeats the iteratee by the amount', () => {
   assertEquals(times(5, 'pizza'), ['pizza', 'pizza', 'pizza', 'pizza', 'pizza'])
   assertEquals(times(3, 'hello'), ['hello', 'hello', 'hello'])
 })
+
+/**
+ * difference()
+ *
+ * @param array: Array<any>
+ * @param arrayToCompare: Array<any>
+ *
+ * Creates an array of array values not
+ * included in the other given arrays using
+ * SameValueZero for equality comparisons.
+ * The order and references of result values
+ * are determined by the first array.
+ *
+ * E.G.
+ * difference([2, 1], [2, 3]) => [1]
+ * difference(['hello', 'pizza', 'world'], ['hello', 'world']) => ['pizza']
+ */
+const difference = (array: Array<any>, arrayToCompare: Array<any>) =>
+  array.filter((item) => !arrayToCompare.includes(item))
+
+Deno.test(
+  'difference() should return the differences in the first array, compared to the second one',
+  () => {
+    assertEquals(difference([2, 1], [2, 3]), [1])
+    assertEquals(difference(['hello', 'pizza', 'world'], ['hello', 'world']), [
+      'pizza',
+    ])
+    assertEquals(
+      difference(
+        [true, false, null, undefined],
+        [true, false, null, undefined]
+      ),
+      []
+    )
+    assertEquals(difference([], []), [])
+    assertEquals(difference(Array.from('hello'), Array.from('world')), [
+      'h',
+      'e',
+    ])
+  }
+)
