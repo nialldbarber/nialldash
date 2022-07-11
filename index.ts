@@ -281,8 +281,8 @@ Deno.test(
  * It returns the modified target object.
  *
  * E.G.
- * findLast([1, 2, 3, 4], (x) => x % 2 === 1) => 3
- * findLast([5, 12, 8, 130, 44, 1], (x) => x > 10) => 44
+ * assign({ a: 1 }, { a: 1 }) => { a: 1 }
+ * assign({ a: 1, b: 2 }, { a: 3, b: 4 }) => { a: 3, b: 4 }
  */
 const assign = (target: Record<any, any>, source: Record<any, any>) => {
   let assignedObj = {}
