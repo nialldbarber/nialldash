@@ -14,12 +14,25 @@ import { assertEquals } from 'https://deno.land/std@0.145.0/testing/asserts.ts'
  * compact([0, 1, false, 2, '', 3]) => [1, 2, 3]
  */
 const compact = (array: Array<any>) => array.filter((item) => !!item)
+const compactImperative = (array: Array<any>) => {
+  const nonFalseyItems = []
+  for (const item of array) {
+    if (item) nonFalseyItems.push(item)
+  }
+  return nonFalseyItems
+}
 
 Deno.test('compact() removes falsey values', () => {
   assertEquals(compact([1, 2, 3, 4]), [1, 2, 3, 4])
   assertEquals(compact([0, 1, false, 2, '', 3]), [1, 2, 3])
   assertEquals(compact([]), [])
   assertEquals(compact([null, undefined, '', 0]), [])
+})
+Deno.test('compactImperative() removes falsey values', () => {
+  assertEquals(compactImperative([1, 2, 3, 4]), [1, 2, 3, 4])
+  assertEquals(compactImperative([0, 1, false, 2, '', 3]), [1, 2, 3])
+  assertEquals(compactImperative([]), [])
+  assertEquals(compactImperative([null, undefined, '', 0]), [])
 })
 
 /**
